@@ -14,49 +14,77 @@ particles = []
 
 class Particle:
     def __init__(self, x, y):
+
         self.x = x
         self.y = y
 
         angle = random.uniform(0, math.pi * 2)
-        speed = random.uniform(1, 6)
+        speed = random.uniform(2, 7)
 
         self.vx = math.cos(angle) * speed
         self.vy = math.sin(angle) * speed
 
-        self.life = random.randint(40, 80)
-        self.size = random.randint(3, 7)
+        self.life = random.randint(60, 120)
+        self.max_life = self.life
+
+        self.size = random.randint(4, 8)
 
         self.color = (
             random.randint(150,255),
-            random.randint(100,255),
-            random.randint(150,255)
+            random.randint(120,255),
+            random.randint(180,255)
         )
 
     def update(self):
+
         self.x += self.vx
         self.y += self.vy
 
-        self.vy += 0.08
+        # gravity
+        self.vy += 0.05
+
+        # drag
+        self.vx *= 0.99
+        self.vy *= 0.99
+
         self.life -= 1
 
     def draw(self, surf):
-        if self.life > 0:
+
+        if self.life <= 0:
+            return
+
+        alpha = int(255 * (self.life / self.max_life))
+
+        glow_surface = pygame.Surface((50,50), pygame.SRCALPHA)
+
+        for r in range(self.size*2, 0, -2):
+
+            glow_alpha = alpha // (r//2 + 1)
+
             pygame.draw.circle(
-                surf,
-                self.color,
-                (int(self.x), int(self.y)),
-                self.size
+                glow_surface,
+                (*self.color, glow_alpha),
+                (25,25),
+                r
             )
+
+        surf.blit(glow_surface, (self.x-25, self.y-25))
 
     def alive(self):
         return self.life > 0
 
 
 def draw_background(surface, t):
+
     for y in range(HEIGHT):
-        c = int(40 + 30 * math.sin(y * 0.01 + t))
-        color = (10, c, 50 + c//2)
-        pygame.draw.line(surface, color, (0, y), (WIDTH, y))
+
+        # 항상 0~255 범위
+        r = int(128 + 127 * math.sin(y*0.01 + t))
+        g = int(128 + 127 * math.sin(y*0.02 + t*0.8))
+        b = int(128 + 127 * math.sin(y*0.015 + t*1.2))
+
+        pygame.draw.line(surface, (r,g,b), (0,y), (WIDTH,y))
 
 
 running = True
@@ -72,7 +100,7 @@ while running:
     buttons = pygame.mouse.get_pressed()
 
     if buttons[0]:
-        for _ in range(8):
+        for _ in range(12):
             particles.append(Particle(mouse[0], mouse[1]))
 
     time += 0.03
