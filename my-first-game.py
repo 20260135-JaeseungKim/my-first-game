@@ -7,7 +7,7 @@ pygame.init()
 WIDTH, HEIGHT = 900, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Fancy Particle Playground")
-#변경
+
 clock = pygame.time.Clock()
 
 particles = []
@@ -73,7 +73,7 @@ class Particle:
 
     def alive(self):
         return self.life > 0
-
+#다른 변경
 
 def draw_background(surface, t):
 
