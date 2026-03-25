@@ -6,15 +6,15 @@
 
 ## AI 대화 기록
 **Q1: 다른 컴퓨터에서 작업하다가 다른 컴퓨터에서 깃허브 내용을 불러오는 방법이 뭐야?
-**A1: Git 저장소를 가져오기 위해서는 clone을 사용합니다.
-**예: git clone https://github.com/아이디/저장소.git
+A1: Git 저장소를 가져오기 위해서는 clone을 사용합니다.
+예: git clone https://github.com/아이디/저장소.git
 
 **Q2: git remote가 무슨 역할이야?
-**A2: git remote는 내 컴퓨터의 Git 저장소와 인터넷에 있는 저장소(예: GitHub)를 연결해주는 설정입니다.
-**예: git remote add origin https://github.com/아이디/저장소.git
+A2: git remote는 내 컴퓨터의 Git 저장소와 인터넷에 있는 저장소(예: GitHub)를 연결해주는 설정입니다.
+예: git remote add origin https://github.com/아이디/저장소.git
 
 **Q3: git 사용 흐름
-**A3: *처음 시작
+A3: *처음 시작
     git init
     git remote add origin 저장소주소
         \/
