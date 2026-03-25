@@ -113,7 +113,7 @@ while running:
 
     # 중심 / 반지름
     c1 = rect1.center
-    c2 = rect2.center
+    c2 = rotated_rect.center
     r1 = rect1.width // 2
     r2 = rect2.width // 2
 
@@ -128,10 +128,13 @@ while running:
 
     # 🟢 OBB 충돌 (SAT)
     obb1 = get_aabb_points(rect1)
-    obb2 = get_obb_points(rect2.center, rect2.width, rect2.height, angle)
+
+    # 🔥 핵심 수정: -angle
+    obb2 = get_obb_points(rotated_rect.center, rect2.width, rect2.height, -angle)
+
     obb_hit = sat_collision(obb1, obb2)
 
-    # 배경 (OBB 기준)
+    # 배경
     screen.fill(RED_BG if obb_hit else WHITE)
 
     # 그리기
@@ -150,9 +153,7 @@ while running:
     pygame.draw.polygon(screen, GREEN, obb1, 2)
     pygame.draw.polygon(screen, GREEN, obb2, 2)
 
-    # ------------------------
-    # 🔥 텍스트 표시
-    # ------------------------
+    # 텍스트
     text1 = font.render(f"Circle: {'HIT' if circle_hit else 'NO'}", True, BLACK)
     text2 = font.render(f"AABB: {'HIT' if aabb_hit else 'NO'}", True, BLACK)
     text3 = font.render(f"OBB: {'HIT' if obb_hit else 'NO'}", True, BLACK)
