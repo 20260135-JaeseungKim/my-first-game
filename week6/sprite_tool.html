@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sprite Sheet → Python Code</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Noto+Sans+KR:wght@400;700&display=swap');
+
+:root {
+  --bg: #0f1117;
+  --surface: #1a1d27;
+  --surface2: #22263a;
+  --border: #2e3350;
+  --accent: #5b8dee;
+  --accent2: #3ddc97;
+  --warn: #f0a500;
+  --text: #e2e8f0;
+  --muted: #7a85a3;
+  --code-bg: #0d1020;
+  --r: 8px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-size: 14px; min-height: 100vh; overflow: hidden; }
+
+header {
+  height: 56px; border-bottom: 1px solid var(--border);
+  padding: 0 20px; display: flex; align-items: center; gap: 12px;
+  background: var(--surface); flex-shrink: 0;
+}
+header .logo { width: 28px; height: 28px; background: var(--accent); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+header h1 { font-size: 14px; font-weight: 700; }
+header p  { font-size: 11px; color: var(--muted); margin-left: 4px; }
+
+.app { display: flex; height: calc(100vh - 56px); }
+
+/* 사이드바 */
+.sidebar {
+  width: 260px; flex-shrink: 0;
+  background: var(--surface); border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; overflow-y: auto;
+  padding: 16px; gap: 16px;
+}
+.sec-title { font-size: 10px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+
+.drop-zone {
+  border: 2px dashed var(--border); border-radius: var(--r);
+  padding: 20px 12px; text-align: center; cursor: pointer;
+  background: var(--surface2); transition: border-color .2s, background .2s;
+}
+.drop-zone:hover, .drop-zone.over { border-color: var(--accent); background: rgba(91,141,238,.07); }
+.drop-zone .icon { font-size: 24px; margin-bottom: 6px; }
+.drop-zone p { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.drop-zone input { display: none; }
+
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.fg label { display: block; font-size: 10px; color: var(--muted); font-weight: 700; margin-bottom: 4px; }
+.fg input {
+  width: 100%; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 7px 9px; color: var(--text);
+  font-family: 'JetBrains Mono', monospace; font-size: 12px; outline: none;
+  transition: border-color .2s;
+}
+.fg input:focus { border-color: var(--accent); }
+.fg.full { grid-column: 1/-1; }
+
+.info-box {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 10px 12px;
+  font-family: 'JetBrains Mono', monospace; font-size: 11px; line-height: 1.9; color: var(--muted);
+}
+.info-box .v { color: var(--accent2); font-weight: 700; }
+
+.btn {
+  width: 100%; padding: 9px; border: none; border-radius: var(--r);
+  font-family: 'Noto Sans KR', sans-serif; font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: opacity .15s, transform .1s;
+}
+.btn:active { transform: scale(.98); }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { opacity: .88; }
+.btn:disabled { opacity: .3; cursor: not-allowed; }
+
+/* 메인 */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+
+.sheet-viewer {
+  flex: 1; overflow: auto; padding: 16px;
+  background: var(--bg); display: flex; gap: 16px; align-items: flex-start;
+}
+
+.canvas-wrap { position: relative; display: inline-block; flex-shrink: 0; }
+#sheetCanvas  { display: block; image-rendering: pixelated; border: 1px solid var(--border); border-radius: var(--r); }
+#overlayCanvas { position: absolute; top: 0; left: 0; pointer-events: none; border-radius: var(--r); }
+#hitCanvas    { position: absolute; top: 0; left: 0; border-radius: var(--r); opacity: 0; cursor: crosshair; }
+
+.anim-panel {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 12px; text-align: center;
+  min-width: 130px; flex-shrink: 0;
+}
+.anim-panel .ap-title { font-size: 10px; color: var(--muted); margin-bottom: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
+#animCanvas { display: block; image-rendering: pixelated; margin: 0 auto; border: 1px solid var(--border); border-radius: 4px; background: #0a0a14; }
+.speed-row { display: flex; align-items: center; gap: 6px; margin-top: 8px; }
+.speed-row span { font-size: 10px; color: var(--muted); }
+.speed-row input { flex: 1; accent-color: var(--accent2); }
+#speedVal { font-size: 10px; color: var(--accent2); font-family: 'JetBrains Mono', monospace; min-width: 36px; }
+
+.empty-hint {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  color: var(--muted); font-size: 13px;
+  border: 1px dashed var(--border); border-radius: var(--r); min-height: 160px;
+}
+
+/* 시퀀스 바 */
+.seq-bar {
+  border-top: 1px solid var(--border); background: var(--surface);
+  padding: 10px 16px; flex-shrink: 0;
+}
+.seq-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.seq-header .seq-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); }
+.seq-header .seq-hint  { font-size: 10px; color: var(--muted); }
+.seq-header .seq-count { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--accent2); margin-left: auto; }
+.seq-clear-btn {
+  font-size: 10px; padding: 2px 8px; border: 1px solid var(--border);
+  border-radius: 4px; background: none; color: var(--muted); cursor: pointer;
+  transition: border-color .15s, color .15s;
+}
+.seq-clear-btn:hover { border-color: var(--warn); color: var(--warn); }
+
+.seq-list {
+  display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px;
+  min-height: 52px; align-items: center;
+}
+.seq-empty-hint { color: var(--muted); font-size: 12px; white-space: nowrap; }
+
+.seq-item {
+  position: relative; flex-shrink: 0;
+  width: 44px; height: 44px;
+  border: 2px solid var(--border); border-radius: 6px;
+  background: var(--surface2);
+  cursor: grab; transition: border-color .15s, transform .12s;
+  user-select: none; overflow: visible;
+}
+.seq-item:hover { border-color: var(--accent); }
+.seq-item.dragging { opacity: .35; transform: scale(.92); cursor: grabbing; }
+.seq-item.drag-over { border-color: var(--accent2); transform: scale(1.1); }
+.seq-item canvas { display: block; image-rendering: pixelated; width: 100%; height: 100%; border-radius: 4px; }
+.seq-item .seq-num {
+  position: absolute; bottom: -1px; right: -1px;
+  background: var(--accent); color: #fff;
+  font-size: 9px; font-family: 'JetBrains Mono', monospace; font-weight: 700;
+  padding: 1px 3px; border-radius: 3px 0 3px 0; line-height: 1.2; pointer-events: none;
+}
+.seq-item .seq-remove {
+  position: absolute; top: -7px; right: -7px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: #e74c3c; color: #fff; border: none;
+  font-size: 10px; line-height: 16px; text-align: center;
+  cursor: pointer; display: none; font-weight: 700; z-index: 10;
+}
+.seq-item:hover .seq-remove { display: block; }
+
+/* 코드 패널 */
+.code-panel {
+  width: 380px; flex-shrink: 0;
+  border-left: 1px solid var(--border);
+  background: var(--code-bg); display: flex; flex-direction: column; overflow: hidden;
+}
+.code-header {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 12px; background: var(--surface);
+  border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.code-tab {
+  font-size: 10px; font-weight: 700; padding: 3px 8px;
+  border-radius: 4px; cursor: pointer; color: var(--muted);
+  transition: background .15s, color .15s;
+}
+.code-tab.active { background: var(--accent); color: #fff; }
+.copy-btn {
+  margin-left: auto; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 4px; color: var(--muted); font-size: 10px; font-weight: 700;
+  padding: 3px 10px; cursor: pointer; transition: border-color .15s, color .15s;
+}
+.copy-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+#codeOutput {
+  flex: 1; overflow: auto; padding: 14px 16px;
+  font-family: 'JetBrains Mono', monospace; font-size: 11px; line-height: 1.75;
+  white-space: pre; color: #c9d1d9;
+}
+
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+::-webkit-scrollbar-track { background: transparent; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🎮</div>
+  <h1>Sprite Sheet → Python Code</h1>
+  <p>프레임 클릭으로 선택 · 드래그로 순서 조정</p>
+</header>
+
+<div class="app">
+
+  <aside class="sidebar">
+    <div>
+      <div class="sec-title">① 이미지 업로드</div>
+      <div class="drop-zone" id="dropZone">
+        <div class="icon">🖼️</div>
+        <p>PNG 드래그 또는 클릭</p>
+        <input type="file" id="fileInput" accept="image/png,image/gif">
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-title">② 프레임 설정</div>
+      <div class="form-grid">
+        <div class="fg"><label>FRAME W (px)</label><input type="number" id="frameW" value="16" min="1"></div>
+        <div class="fg"><label>FRAME H (px)</label><input type="number" id="frameH" value="16" min="1"></div>
+        <div class="fg full"><label>변수 이름 접두사</label><input type="text" id="varPrefix" value="player"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-title">③ 시트 정보</div>
+      <div class="info-box" id="sheetInfo">이미지를 업로드하세요</div>
+    </div>
+
+    <div style="margin-top:auto">
+      <button class="btn btn-primary" id="generateBtn" disabled>코드 생성</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="sheet-viewer">
+      <div class="empty-hint" id="emptyHint">이미지를 업로드하면 시트가 표시됩니다</div>
+      <div class="canvas-wrap" id="canvasWrap" style="display:none">
+        <canvas id="sheetCanvas"></canvas>
+        <canvas id="overlayCanvas"></canvas>
+        <canvas id="hitCanvas"></canvas>
+      </div>
+      <div class="anim-panel" id="animPanel" style="display:none">
+        <div class="ap-title">미리보기</div>
+        <canvas id="animCanvas" width="80" height="80"></canvas>
+        <div class="speed-row">
+          <span>속도</span>
+          <input type="range" id="speedSlider" min="50" max="500" value="150" step="10">
+          <span id="speedVal">150ms</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="seq-bar">
+      <div class="seq-header">
+        <span class="seq-title">walk_frames 시퀀스</span>
+        <span class="seq-hint">클릭 추가 · 드래그 순서변경 · ✕ 제거</span>
+        <span class="seq-count" id="seqCount">0개</span>
+        <button class="seq-clear-btn" id="seqClearBtn">전체 초기화</button>
+      </div>
+      <div class="seq-list" id="seqList">
+        <span class="seq-empty-hint">시트에서 프레임을 클릭해서 추가하세요</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="code-panel">
+    <div class="code-header">
+      <div class="code-tab active" data-tab="full">전체 데모</div>
+      <div class="code-tab" data-tab="dict">딕셔너리만</div>
+      <button class="copy-btn" id="copyBtn">복사</button>
+    </div>
+    <div id="codeOutput">← 이미지 업로드 후
+프레임을 클릭해서 시퀀스를 구성하고
+[코드 생성]을 누르세요</div>
+  </div>
+
+</div>
+
+<script>
+// ── 상태 ──
+let imgEl = null, imgW = 0, imgH = 0;
+let frameW = 16, frameH = 16, cols = 0, rows = 0, scale = 1;
+let b64Data = '';
+let currentTab = 'full';
+let animTimer = null, animIdx = 0, animDelay = 150;
+let sequence = [];   // [{idx, canvas}, ...]
+let dragSrcSeqIdx = null;
+let offscreen = null;
+
+// ── DOM ──
+const dropZone    = document.getElementById('dropZone');
+const fileInput   = document.getElementById('fileInput');
+const fwInput     = document.getElementById('frameW');
+const fhInput     = document.getElementById('frameH');
+const varPrefix   = document.getElementById('varPrefix');
+const sheetInfo   = document.getElementById('sheetInfo');
+const generateBtn = document.getElementById('generateBtn');
+const emptyHint   = document.getElementById('emptyHint');
+const canvasWrap  = document.getElementById('canvasWrap');
+const sheetCanvas = document.getElementById('sheetCanvas');
+const overCanvas  = document.getElementById('overlayCanvas');
+const hitCanvas   = document.getElementById('hitCanvas');
+const animPanel   = document.getElementById('animPanel');
+const animCanvas  = document.getElementById('animCanvas');
+const speedSlider = document.getElementById('speedSlider');
+const speedValEl  = document.getElementById('speedVal');
+const seqList     = document.getElementById('seqList');
+const seqCount    = document.getElementById('seqCount');
+const seqClearBtn = document.getElementById('seqClearBtn');
+const codeOutput  = document.getElementById('codeOutput');
+const copyBtn     = document.getElementById('copyBtn');
+
+// ── 업로드 ──
+dropZone.addEventListener('click', () => fileInput.click());
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('over'));
+dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('over'); if (e.dataTransfer.files[0]) loadImg(e.dataTransfer.files[0]); });
+fileInput.addEventListener('change', () => { if (fileInput.files[0]) loadImg(fileInput.files[0]); });
+
+function loadImg(file) {
+  const reader = new FileReader();
+  reader.onload = ev => {
+    b64Data = ev.target.result.split(',')[1];
+    imgEl = new Image();
+    imgEl.onload = () => {
+      imgW = imgEl.naturalWidth; imgH = imgEl.naturalHeight;
+      offscreen = document.createElement('canvas');
+      offscreen.width = imgW; offscreen.height = imgH;
+      offscreen.getContext('2d').drawImage(imgEl, 0, 0);
+      sequence = [];
+      updateAll();
+    };
+    imgEl.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── 설정 변경 ──
+[fwInput, fhInput].forEach(el => el.addEventListener('input', updateAll));
+varPrefix.addEventListener('input', () => { if (generateBtn._codes) rebuildCode(); });
+
+function updateAll() {
+  if (!imgEl) return;
+  frameW = Math.max(1, parseInt(fwInput.value) || 16);
+  frameH = Math.max(1, parseInt(fhInput.value) || 16);
+  cols = Math.floor(imgW / frameW);
+  rows = Math.floor(imgH / frameH);
+
+  // 정수배 스케일 계산 (최대 480×320 기준)
+  let s = 1;
+  while ((s + 1) * imgW <= 480 && (s + 1) * imgH <= 320) s++;
+  if (s * imgW > 480 || s * imgH > 320) s = Math.min(480 / imgW, 320 / imgH);
+  scale = Math.max(0.5, s);
+
+  updateInfo();
+  drawSheet();
+  // 범위 초과 시퀀스 정리
+  sequence = sequence.filter(item => item.idx < cols * rows);
+  renderSeqBar();
+  restartAnim();
+  generateBtn.disabled = false;
+}
+
+function updateInfo() {
+  sheetInfo.innerHTML =
+    `이미지: <span class="v">${imgW} × ${imgH}</span><br>` +
+    `프레임: <span class="v">${frameW} × ${frameH}</span><br>` +
+    `열 × 행: <span class="v">${cols} × ${rows}</span><br>` +
+    `총 프레임: <span class="v">${cols * rows}</span>`;
+}
+
+// ── 시트 그리기 ──
+function drawSheet() {
+  emptyHint.style.display = 'none';
+  canvasWrap.style.display = 'inline-block';
+  const dw = Math.round(imgW * scale), dh = Math.round(imgH * scale);
+  [sheetCanvas, overCanvas, hitCanvas].forEach(c => {
+    c.width = dw; c.height = dh;
+    c.style.width = dw + 'px'; c.style.height = dh + 'px';
+  });
+  const ctx = sheetCanvas.getContext('2d');
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(imgEl, 0, 0, dw, dh);
+  drawOverlay(-1, -1);
+}
+
+function drawOverlay(hoverC, hoverR) {
+  const ctx = overCanvas.getContext('2d');
+  ctx.clearRect(0, 0, overCanvas.width, overCanvas.height);
+  const fw = frameW * scale, fh = frameH * scale;
+
+  // 선택된 프레임 강조 + 순서번호
+  const seqByIdx = {};
+  sequence.forEach((s, i) => {
+    if (!seqByIdx[s.idx]) seqByIdx[s.idx] = [];
+    seqByIdx[s.idx].push(i + 1);
+  });
+  Object.entries(seqByIdx).forEach(([idxStr, orders]) => {
+    const idx = parseInt(idxStr);
+    const c = idx % cols, r = Math.floor(idx / cols);
+    ctx.fillStyle = 'rgba(61,220,151,0.28)';
+    ctx.fillRect(c * fw, r * fh, fw, fh);
+    ctx.fillStyle = '#3ddc97';
+    const fs = Math.max(8, Math.min(13, fh * 0.42));
+    ctx.font = `bold ${fs}px JetBrains Mono, monospace`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(orders.join(','), c * fw + fw / 2, r * fh + fh / 2);
+  });
+
+  // 호버
+  if (hoverC >= 0 && hoverR >= 0) {
+    ctx.fillStyle = 'rgba(91,141,238,0.22)';
+    ctx.fillRect(hoverC * fw, hoverR * fh, fw, fh);
+  }
+
+  // 그리드
+  ctx.strokeStyle = 'rgba(91,141,238,0.38)';
+  ctx.lineWidth = 0.8;
+  for (let c = 0; c <= cols; c++) { ctx.beginPath(); ctx.moveTo(c * fw, 0); ctx.lineTo(c * fw, rows * fh); ctx.stroke(); }
+  for (let r = 0; r <= rows; r++) { ctx.beginPath(); ctx.moveTo(0, r * fh); ctx.lineTo(cols * fw, r * fh); ctx.stroke(); }
+
+  // 프레임 인덱스 번호 (미선택)
+  const fs = Math.max(7, Math.min(10, fh * 0.36));
+  ctx.font = `${fs}px JetBrains Mono, monospace`;
+  ctx.textAlign = 'right'; ctx.textBaseline = 'bottom';
+  ctx.fillStyle = 'rgba(255,255,255,0.3)';
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const idx = r * cols + c;
+      if (!seqByIdx[idx]) ctx.fillText(idx, (c + 1) * fw - 2, (r + 1) * fh - 2);
+    }
+  }
+}
+
+// ── 클릭 / 호버 ──
+hitCanvas.addEventListener('mousemove', e => {
+  const rect = hitCanvas.getBoundingClientRect();
+  const c = Math.floor((e.clientX - rect.left) / (frameW * scale));
+  const r = Math.floor((e.clientY - rect.top)  / (frameH * scale));
+  (c >= 0 && c < cols && r >= 0 && r < rows) ? drawOverlay(c, r) : drawOverlay(-1, -1);
+});
+hitCanvas.addEventListener('mouseleave', () => drawOverlay(-1, -1));
+hitCanvas.addEventListener('click', e => {
+  const rect = hitCanvas.getBoundingClientRect();
+  const c = Math.floor((e.clientX - rect.left) / (frameW * scale));
+  const r = Math.floor((e.clientY - rect.top)  / (frameH * scale));
+  if (c < 0 || c >= cols || r < 0 || r >= rows) return;
+  addToSeq(r * cols + c);
+});
+
+function addToSeq(idx) {
+  const fc = document.createElement('canvas');
+  fc.width = frameW; fc.height = frameH;
+  fc.getContext('2d').drawImage(offscreen,
+    (idx % cols) * frameW, Math.floor(idx / cols) * frameH,
+    frameW, frameH, 0, 0, frameW, frameH);
+  sequence.push({ idx, canvas: fc });
+  renderSeqBar();
+  restartAnim();
+  drawOverlay(-1, -1);
+}
+
+// ── 시퀀스 바 렌더 ──
+function renderSeqBar() {
+  seqCount.textContent = `${sequence.length}개`;
+  seqList.innerHTML = '';
+
+  if (sequence.length === 0) {
+    const hint = document.createElement('span');
+    hint.className = 'seq-empty-hint';
+    hint.textContent = '시트에서 프레임을 클릭해서 추가하세요';
+    seqList.appendChild(hint);
+    return;
+  }
+
+  sequence.forEach((item, si) => {
+    const el = document.createElement('div');
+    el.className = 'seq-item';
+    el.draggable = true;
+
+    const cv = document.createElement('canvas');
+    cv.width = frameW; cv.height = frameH;
+    cv.style.imageRendering = 'pixelated';
+    cv.getContext('2d').drawImage(item.canvas, 0, 0);
+    el.appendChild(cv);
+
+    const badge = document.createElement('div');
+    badge.className = 'seq-num';
+    badge.textContent = item.idx;
+    el.appendChild(badge);
+
+    const rmBtn = document.createElement('button');
+    rmBtn.className = 'seq-remove';
+    rmBtn.textContent = '✕';
+    rmBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      sequence.splice(si, 1);
+      renderSeqBar(); restartAnim(); drawOverlay(-1, -1);
+    });
+    el.appendChild(rmBtn);
+
+    el.addEventListener('dragstart', () => {
+      dragSrcSeqIdx = si;
+      setTimeout(() => el.classList.add('dragging'), 0);
+    });
+    el.addEventListener('dragend', () => {
+      el.classList.remove('dragging');
+      document.querySelectorAll('.seq-item').forEach(e => e.classList.remove('drag-over'));
+    });
+    el.addEventListener('dragover', e => {
+      e.preventDefault();
+      document.querySelectorAll('.seq-item').forEach(e => e.classList.remove('drag-over'));
+      el.classList.add('drag-over');
+    });
+    el.addEventListener('drop', e => {
+      e.preventDefault();
+      if (dragSrcSeqIdx === null || dragSrcSeqIdx === si) return;
+      const moved = sequence.splice(dragSrcSeqIdx, 1)[0];
+      sequence.splice(si, 0, moved);
+      dragSrcSeqIdx = null;
+      renderSeqBar(); restartAnim(); drawOverlay(-1, -1);
+    });
+
+    seqList.appendChild(el);
+  });
+}
+
+seqClearBtn.addEventListener('click', () => {
+  sequence = []; renderSeqBar(); restartAnim(); drawOverlay(-1, -1);
+});
+
+// ── 애니메이션 ──
+function restartAnim() {
+  if (animTimer) { clearInterval(animTimer); animTimer = null; }
+  animIdx = 0;
+  if (!sequence.length) {
+    animPanel.style.display = 'none';
+    animCanvas.getContext('2d').clearRect(0, 0, 80, 80);
+    return;
+  }
+  animPanel.style.display = 'block';
+  function tick() {
+    const ctx = animCanvas.getContext('2d');
+    ctx.clearRect(0, 0, 80, 80);
+    ctx.imageSmoothingEnabled = false;
+    const fc = sequence[animIdx % sequence.length].canvas;
+    const s = Math.min(80 / frameW, 80 / frameH);
+    ctx.drawImage(fc, (80 - frameW * s) / 2, (80 - frameH * s) / 2, frameW * s, frameH * s);
+    animIdx = (animIdx + 1) % sequence.length;
+  }
+  tick();
+  animTimer = setInterval(tick, animDelay);
+}
+
+speedSlider.addEventListener('input', () => {
+  animDelay = parseInt(speedSlider.value);
+  speedValEl.textContent = animDelay + 'ms';
+  restartAnim();
+});
+
+// ── 코드 생성 ──
+generateBtn.addEventListener('click', rebuildCode);
+
+function rebuildCode() {
+  const prefix = varPrefix.value.trim() || 'player';
+  const indices = sequence.map(s => s.idx);
+  const codes = {
+    full: makeFullDemo(prefix, indices),
+    dict: makeDictOnly(prefix, indices),
+  };
+  showCode(codes[currentTab] || codes['full']);
+  generateBtn._codes = codes;
+}
+
+function makeDictOnly(prefix, indices) {
+  const total = cols * rows;
+  const idxStr = indices.join(', ');
+  return `import base64, io
+import pygame
+
+# ── Base64 데이터 ──
+SHEET_B64 = "${b64Data}"
+
+# ── 시트 로드 ──
+sheet_bytes = base64.b64decode(SHEET_B64)
+${prefix}_sheet = pygame.image.load(io.BytesIO(sheet_bytes)).convert_alpha()
+
+# ── 프레임 리스트 (인덱스 0 ~ ${total - 1}) ──
+FRAME_W, FRAME_H = ${frameW}, ${frameH}
+COLS = ${cols}
+
+${prefix}_frames = []
+for i in range(${total}):
+    row, col = divmod(i, COLS)
+    rect = pygame.Rect(col * FRAME_W, row * FRAME_H, FRAME_W, FRAME_H)
+    ${prefix}_frames.append(${prefix}_sheet.subsurface(rect))
+
+# ── walk_frames: 선택한 순서 ──
+walk_frames = [${prefix}_frames[i] for i in [${idxStr}]]
+`;
+}
+
+function makeFullDemo(prefix, indices) {
+  const total = cols * rows;
+  const idxStr = indices.join(', ');
+  return `import base64, io
+import pygame
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+#  스프라이트 시트 Base64 데이터
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SHEET_B64 = "${b64Data}"
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+#  설정
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SCREEN_W, SCREEN_H = 480, 320
+FRAME_W, FRAME_H   = ${frameW}, ${frameH}
+COLS               = ${cols}
+FRAME_DELAY        = 150   # ms
+DISPLAY_SCALE      = 4     # 화면 확대 배율
+
+pygame.init()
+screen = pygame.display.set_mode((SCREEN_W, SCREEN_H))
+pygame.display.set_caption("Sprite Animation Demo")
+clock = pygame.time.Clock()
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+#  시트 로드 → 프레임 리스트
+#  인덱스 0 ~ ${total - 1} (총 ${total}개)
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+sheet_bytes = base64.b64decode(SHEET_B64)
+${prefix}_sheet = pygame.image.load(io.BytesIO(sheet_bytes)).convert_alpha()
+
+${prefix}_frames = []
+for i in range(${total}):
+    row, col = divmod(i, COLS)
+    rect = pygame.Rect(col * FRAME_W, row * FRAME_H, FRAME_W, FRAME_H)
+    ${prefix}_frames.append(${prefix}_sheet.subsurface(rect))
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+#  walk_frames: 선택한 프레임 순서
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+walk_frames = [${prefix}_frames[i] for i in [${idxStr}]]
+
+frame_index = 0
+frame_timer = 0
+x = SCREEN_W // 2 - (FRAME_W * DISPLAY_SCALE) // 2
+y = SCREEN_H // 2 - (FRAME_H * DISPLAY_SCALE) // 2
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+#  게임 루프
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+running = True
+while running:
+    dt = clock.tick(60)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+            running = False
+
+    frame_timer += dt
+    if frame_timer >= FRAME_DELAY:
+        frame_index = (frame_index + 1) % len(walk_frames)
+        frame_timer = 0
+
+    screen.fill((30, 30, 40))
+    frame_img = pygame.transform.scale(
+        walk_frames[frame_index],
+        (FRAME_W * DISPLAY_SCALE, FRAME_H * DISPLAY_SCALE)
+    )
+    screen.blit(frame_img, (x, y))
+    pygame.display.flip()
+
+pygame.quit()
+`;
+}
+
+function showCode(code) { codeOutput.textContent = code; }
+
+document.querySelectorAll('.code-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    currentTab = tab.dataset.tab;
+    document.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    if (generateBtn._codes) showCode(generateBtn._codes[currentTab]);
+  });
+});
+
+copyBtn.addEventListener('click', () => {
+  navigator.clipboard.writeText(codeOutput.textContent).then(() => {
+    copyBtn.textContent = '✓ 복사됨';
+    setTimeout(() => copyBtn.textContent = '복사', 1500);
+  });
+});
+</script>
+</body>
+</html>

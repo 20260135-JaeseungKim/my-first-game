@@ -1,0 +1,893 @@
+.sprite {
+    background-image: url(spritesheet.png);
+    background-repeat: no-repeat;
+    display: block;
+}
+
+.sprite-enemy_1_b_l1 {
+    width: 64px;
+    height: 64px;
+    background-position: 0 0;
+}
+
+.sprite-enemy_1_b_l2 {
+    width: 64px;
+    height: 64px;
+    background-position: -64px 0;
+}
+
+.sprite-enemy_1_b_m {
+    width: 64px;
+    height: 64px;
+    background-position: -128px 0;
+}
+
+.sprite-enemy_1_b_r1 {
+    width: 64px;
+    height: 64px;
+    background-position: -192px 0;
+}
+
+.sprite-enemy_1_b_r2 {
+    width: 64px;
+    height: 64px;
+    background-position: -256px 0;
+}
+
+.sprite-enemy_1_g_l1 {
+    width: 64px;
+    height: 64px;
+    background-position: -320px 0;
+}
+
+.sprite-enemy_1_g_l2 {
+    width: 64px;
+    height: 64px;
+    background-position: -384px 0;
+}
+
+.sprite-enemy_1_g_m {
+    width: 64px;
+    height: 64px;
+    background-position: -448px 0;
+}
+
+.sprite-enemy_1_g_r1 {
+    width: 64px;
+    height: 64px;
+    background-position: -512px 0;
+}
+
+.sprite-enemy_1_g_r2 {
+    width: 64px;
+    height: 64px;
+    background-position: -576px 0;
+}
+
+.sprite-enemy_1_r_l1 {
+    width: 64px;
+    height: 64px;
+    background-position: -640px 0;
+}
+
+.sprite-enemy_1_r_l2 {
+    width: 64px;
+    height: 64px;
+    background-position: 0 -64px;
+}
+
+.sprite-enemy_1_r_m {
+    width: 64px;
+    height: 64px;
+    background-position: -64px -64px;
+}
+
+.sprite-enemy_1_r_r1 {
+    width: 64px;
+    height: 64px;
+    background-position: -128px -64px;
+}
+
+.sprite-enemy_1_r_r2 {
+    width: 64px;
+    height: 64px;
+    background-position: -192px -64px;
+}
+
+.sprite-enemy_1_shadow_l1 {
+    width: 64px;
+    height: 64px;
+    background-position: -261px -69px;
+}
+
+.sprite-enemy_1_shadow_l2 {
+    width: 64px;
+    height: 64px;
+    background-position: -335px -69px;
+}
+
+.sprite-enemy_1_shadow_m {
+    width: 64px;
+    height: 64px;
+    background-position: -409px -69px;
+}
+
+.sprite-enemy_1_shadow_r1 {
+    width: 64px;
+    height: 64px;
+    background-position: -483px -69px;
+}
+
+.sprite-enemy_1_shadow_r2 {
+    width: 64px;
+    height: 64px;
+    background-position: -557px -69px;
+}
+
+.sprite-enemy_2_b_l1 {
+    width: 64px;
+    height: 64px;
+    background-position: -626px -64px;
+}
+
+.sprite-enemy_2_b_l2 {
+    width: 64px;
+    height: 64px;
+    background-position: 0 -128px;
+}
+
+.sprite-enemy_2_b_m {
+    width: 64px;
+    height: 64px;
+    background-position: -64px -128px;
+}
+
+.sprite-enemy_2_b_r1 {
+    width: 64px;
+    height: 64px;
+    background-position: -128px -128px;
+}
+
+.sprite-enemy_2_b_r2 {
+    width: 64px;
+    height: 64px;
+    background-position: -192px -128px;
+}
+
+.sprite-enemy_2_g_l1 {
+    width: 64px;
+    height: 64px;
+    background-position: -626px -128px;
+}
+
+.sprite-enemy_2_g_l2 {
+    width: 64px;
+    height: 64px;
+    background-position: 0 -192px;
+}
+
+.sprite-enemy_2_g_m {
+    width: 64px;
+    height: 64px;
+    background-position: -64px -192px;
+}
+
+.sprite-enemy_2_g_r1 {
+    width: 64px;
+    height: 64px;
+    background-position: -128px -192px;
+}
+
+.sprite-enemy_2_g_r2 {
+    width: 64px;
+    height: 64px;
+    background-position: -192px -192px;
+}
+
+.sprite-enemy_2_r_l1 {
+    width: 64px;
+    height: 64px;
+    background-position: -256px -192px;
+}
+
+.sprite-enemy_2_r_l2 {
+    width: 64px;
+    height: 64px;
+    background-position: -320px -192px;
+}
+
+.sprite-enemy_2_r_m {
+    width: 64px;
+    height: 64px;
+    background-position: -384px -192px;
+}
+
+.sprite-enemy_2_r_r1 {
+    width: 64px;
+    height: 64px;
+    background-position: -448px -192px;
+}
+
+.sprite-enemy_2_r_r2 {
+    width: 64px;
+    height: 64px;
+    background-position: -512px -192px;
+}
+
+.sprite-enemy_2_shadow_l1 {
+    width: 64px;
+    height: 64px;
+    background-position: -581px -197px;
+}
+
+.sprite-enemy_2_shadow_l2 {
+    width: 64px;
+    height: 64px;
+    background-position: -655px -197px;
+}
+
+.sprite-enemy_2_shadow_m {
+    width: 64px;
+    height: 64px;
+    background-position: -5px -271px;
+}
+
+.sprite-enemy_2_shadow_r1 {
+    width: 64px;
+    height: 64px;
+    background-position: -79px -271px;
+}
+
+.sprite-enemy_2_shadow_r2 {
+    width: 64px;
+    height: 64px;
+    background-position: -153px -271px;
+}
+
+.sprite-exhaust_01 {
+    width: 64px;
+    height: 64px;
+    background-position: -227px -271px;
+}
+
+.sprite-exhaust_02 {
+    width: 64px;
+    height: 64px;
+    background-position: -301px -271px;
+}
+
+.sprite-exhaust_03 {
+    width: 64px;
+    height: 64px;
+    background-position: -375px -271px;
+}
+
+.sprite-exhaust_04 {
+    width: 64px;
+    height: 64px;
+    background-position: -449px -271px;
+}
+
+.sprite-exhaust_05 {
+    width: 64px;
+    height: 64px;
+    background-position: -523px -271px;
+}
+
+.sprite-explosion_1_01 {
+    width: 52px;
+    height: 51px;
+    background-position: -597px -271px;
+}
+
+.sprite-explosion_1_02 {
+    width: 52px;
+    height: 51px;
+    background-position: -659px -271px;
+}
+
+.sprite-explosion_1_03 {
+    width: 52px;
+    height: 51px;
+    background-position: -597px -332px;
+}
+
+.sprite-explosion_1_04 {
+    width: 52px;
+    height: 51px;
+    background-position: -659px -332px;
+}
+
+.sprite-explosion_1_05 {
+    width: 52px;
+    height: 51px;
+    background-position: -5px -393px;
+}
+
+.sprite-explosion_1_06 {
+    width: 52px;
+    height: 51px;
+    background-position: -67px -393px;
+}
+
+.sprite-explosion_1_07 {
+    width: 52px;
+    height: 51px;
+    background-position: -129px -393px;
+}
+
+.sprite-explosion_1_08 {
+    width: 52px;
+    height: 51px;
+    background-position: -191px -393px;
+}
+
+.sprite-explosion_1_09 {
+    width: 52px;
+    height: 51px;
+    background-position: -253px -393px;
+}
+
+.sprite-explosion_1_10 {
+    width: 52px;
+    height: 51px;
+    background-position: -315px -393px;
+}
+
+.sprite-explosion_1_11 {
+    width: 52px;
+    height: 51px;
+    background-position: -377px -393px;
+}
+
+.sprite-explosion_2_01 {
+    width: 52px;
+    height: 51px;
+    background-position: -439px -393px;
+}
+
+.sprite-explosion_2_02 {
+    width: 52px;
+    height: 51px;
+    background-position: -501px -393px;
+}
+
+.sprite-explosion_2_03 {
+    width: 52px;
+    height: 51px;
+    background-position: -563px -393px;
+}
+
+.sprite-explosion_2_04 {
+    width: 52px;
+    height: 51px;
+    background-position: -625px -393px;
+}
+
+.sprite-explosion_2_05 {
+    width: 52px;
+    height: 51px;
+    background-position: -5px -454px;
+}
+
+.sprite-explosion_2_06 {
+    width: 52px;
+    height: 51px;
+    background-position: -67px -454px;
+}
+
+.sprite-explosion_2_07 {
+    width: 52px;
+    height: 51px;
+    background-position: -129px -454px;
+}
+
+.sprite-explosion_2_08 {
+    width: 52px;
+    height: 51px;
+    background-position: -191px -454px;
+}
+
+.sprite-explosion_2_09 {
+    width: 52px;
+    height: 51px;
+    background-position: -253px -454px;
+}
+
+.sprite-explosion_3_01 {
+    width: 52px;
+    height: 51px;
+    background-position: -315px -454px;
+}
+
+.sprite-explosion_3_02 {
+    width: 52px;
+    height: 51px;
+    background-position: -377px -454px;
+}
+
+.sprite-explosion_3_03 {
+    width: 52px;
+    height: 51px;
+    background-position: -439px -454px;
+}
+
+.sprite-explosion_3_04 {
+    width: 52px;
+    height: 51px;
+    background-position: -501px -454px;
+}
+
+.sprite-explosion_3_05 {
+    width: 52px;
+    height: 51px;
+    background-position: -563px -454px;
+}
+
+.sprite-explosion_3_06 {
+    width: 52px;
+    height: 51px;
+    background-position: -625px -454px;
+}
+
+.sprite-explosion_3_07 {
+    width: 52px;
+    height: 51px;
+    background-position: -5px -515px;
+}
+
+.sprite-explosion_3_08 {
+    width: 52px;
+    height: 51px;
+    background-position: -67px -515px;
+}
+
+.sprite-explosion_3_09 {
+    width: 52px;
+    height: 51px;
+    background-position: -129px -515px;
+}
+
+.sprite-mine_11_01 {
+    width: 48px;
+    height: 48px;
+    background-position: -186px -510px;
+}
+
+.sprite-mine_11_02 {
+    width: 48px;
+    height: 48px;
+    background-position: -234px -510px;
+}
+
+.sprite-mine_11_03 {
+    width: 48px;
+    height: 48px;
+    background-position: -282px -510px;
+}
+
+.sprite-mine_11_04 {
+    width: 48px;
+    height: 48px;
+    background-position: -330px -510px;
+}
+
+.sprite-mine_11_05 {
+    width: 48px;
+    height: 48px;
+    background-position: -378px -510px;
+}
+
+.sprite-mine_11_06 {
+    width: 48px;
+    height: 48px;
+    background-position: -426px -510px;
+}
+
+.sprite-mine_11_07 {
+    width: 48px;
+    height: 48px;
+    background-position: -474px -510px;
+}
+
+.sprite-mine_11_08 {
+    width: 48px;
+    height: 48px;
+    background-position: -522px -510px;
+}
+
+.sprite-mine_11_09 {
+    width: 48px;
+    height: 48px;
+    background-position: -570px -510px;
+}
+
+.sprite-mine_12_01 {
+    width: 48px;
+    height: 48px;
+    background-position: -618px -510px;
+}
+
+.sprite-mine_12_02 {
+    width: 48px;
+    height: 48px;
+    background-position: -666px -510px;
+}
+
+.sprite-mine_12_03 {
+    width: 48px;
+    height: 48px;
+    background-position: -186px -558px;
+}
+
+.sprite-mine_12_04 {
+    width: 48px;
+    height: 48px;
+    background-position: -234px -558px;
+}
+
+.sprite-mine_12_05 {
+    width: 48px;
+    height: 48px;
+    background-position: -282px -558px;
+}
+
+.sprite-mine_12_06 {
+    width: 48px;
+    height: 48px;
+    background-position: -330px -558px;
+}
+
+.sprite-mine_12_07 {
+    width: 48px;
+    height: 48px;
+    background-position: -378px -558px;
+}
+
+.sprite-mine_12_08 {
+    width: 48px;
+    height: 48px;
+    background-position: -426px -558px;
+}
+
+.sprite-mine_12_09 {
+    width: 48px;
+    height: 48px;
+    background-position: -474px -558px;
+}
+
+.sprite-mine_1_01 {
+    width: 48px;
+    height: 48px;
+    background-position: -522px -558px;
+}
+
+.sprite-mine_1_02 {
+    width: 48px;
+    height: 48px;
+    background-position: -570px -558px;
+}
+
+.sprite-mine_1_03 {
+    width: 48px;
+    height: 48px;
+    background-position: -618px -558px;
+}
+
+.sprite-mine_1_04 {
+    width: 48px;
+    height: 48px;
+    background-position: -666px -558px;
+}
+
+.sprite-mine_1_05 {
+    width: 48px;
+    height: 48px;
+    background-position: 0 -606px;
+}
+
+.sprite-mine_1_06 {
+    width: 48px;
+    height: 48px;
+    background-position: -48px -606px;
+}
+
+.sprite-mine_1_07 {
+    width: 48px;
+    height: 48px;
+    background-position: -96px -606px;
+}
+
+.sprite-mine_1_08 {
+    width: 48px;
+    height: 48px;
+    background-position: -144px -606px;
+}
+
+.sprite-mine_1_09 {
+    width: 48px;
+    height: 48px;
+    background-position: -192px -606px;
+}
+
+.sprite-mine_1_shadow_01 {
+    width: 48px;
+    height: 48px;
+    background-position: -245px -611px;
+}
+
+.sprite-mine_1_shadow_02 {
+    width: 48px;
+    height: 48px;
+    background-position: -303px -611px;
+}
+
+.sprite-mine_1_shadow_03 {
+    width: 48px;
+    height: 48px;
+    background-position: -361px -611px;
+}
+
+.sprite-mine_1_shadow_04 {
+    width: 48px;
+    height: 48px;
+    background-position: -419px -611px;
+}
+
+.sprite-mine_1_shadow_05 {
+    width: 48px;
+    height: 48px;
+    background-position: -477px -611px;
+}
+
+.sprite-mine_1_shadow_06 {
+    width: 48px;
+    height: 48px;
+    background-position: -535px -611px;
+}
+
+.sprite-mine_1_shadow_07 {
+    width: 48px;
+    height: 48px;
+    background-position: -593px -611px;
+}
+
+.sprite-mine_1_shadow_08 {
+    width: 48px;
+    height: 48px;
+    background-position: -651px -611px;
+}
+
+.sprite-mine_21_01 {
+    width: 48px;
+    height: 48px;
+    background-position: 0 -664px;
+}
+
+.sprite-mine_21_02 {
+    width: 48px;
+    height: 48px;
+    background-position: -48px -664px;
+}
+
+.sprite-mine_21_03 {
+    width: 48px;
+    height: 48px;
+    background-position: -96px -664px;
+}
+
+.sprite-mine_21_04 {
+    width: 48px;
+    height: 48px;
+    background-position: -144px -664px;
+}
+
+.sprite-mine_22_01 {
+    width: 48px;
+    height: 48px;
+    background-position: -192px -664px;
+}
+
+.sprite-mine_22_02 {
+    width: 48px;
+    height: 48px;
+    background-position: -240px -664px;
+}
+
+.sprite-mine_22_03 {
+    width: 48px;
+    height: 48px;
+    background-position: -288px -664px;
+}
+
+.sprite-mine_22_04 {
+    width: 48px;
+    height: 48px;
+    background-position: -336px -664px;
+}
+
+.sprite-mine_2_01 {
+    width: 48px;
+    height: 48px;
+    background-position: -384px -664px;
+}
+
+.sprite-mine_2_02 {
+    width: 48px;
+    height: 48px;
+    background-position: -432px -664px;
+}
+
+.sprite-mine_2_03 {
+    width: 48px;
+    height: 48px;
+    background-position: -480px -664px;
+}
+
+.sprite-mine_2_04 {
+    width: 48px;
+    height: 48px;
+    background-position: -528px -664px;
+}
+
+.sprite-mine_2_shadow_01 {
+    width: 48px;
+    height: 48px;
+    background-position: -581px -669px;
+}
+
+.sprite-mine_2_shadow_02 {
+    width: 48px;
+    height: 48px;
+    background-position: -639px -669px;
+}
+
+.sprite-mine_2_shadow_03 {
+    width: 48px;
+    height: 48px;
+    background-position: -709px -5px;
+}
+
+.sprite-mine_2_shadow_04 {
+    width: 48px;
+    height: 48px;
+    background-position: -709px -63px;
+}
+
+.sprite-plasma_1 {
+    width: 6px;
+    height: 21px;
+    background-position: -767px -5px;
+}
+
+.sprite-plasma_2 {
+    width: 5px;
+    height: 15px;
+    background-position: -767px -36px;
+}
+
+.sprite-player_b_l1 {
+    width: 64px;
+    height: 64px;
+    background-position: -695px -121px;
+}
+
+.sprite-player_b_l2 {
+    width: 64px;
+    height: 64px;
+    background-position: -687px -393px;
+}
+
+.sprite-player_b_m {
+    width: 64px;
+    height: 64px;
+    background-position: -709px -611px;
+}
+
+.sprite-player_b_r1 {
+    width: 64px;
+    height: 64px;
+    background-position: -697px -685px;
+}
+
+.sprite-player_b_r2 {
+    width: 64px;
+    height: 64px;
+    background-position: -783px -5px;
+}
+
+.sprite-player_r_l1 {
+    width: 64px;
+    height: 64px;
+    background-position: -769px -79px;
+}
+
+.sprite-player_r_l2 {
+    width: 64px;
+    height: 64px;
+    background-position: -769px -153px;
+}
+
+.sprite-player_r_m {
+    width: 64px;
+    height: 64px;
+    background-position: -729px -227px;
+}
+
+.sprite-player_r_r1 {
+    width: 64px;
+    height: 64px;
+    background-position: -721px -301px;
+}
+
+.sprite-player_r_r2 {
+    width: 64px;
+    height: 64px;
+    background-position: -761px -375px;
+}
+
+.sprite-player_shadow_l1 {
+    width: 64px;
+    height: 64px;
+    background-position: -761px -449px;
+}
+
+.sprite-player_shadow_l2 {
+    width: 64px;
+    height: 64px;
+    background-position: -719px -523px;
+}
+
+.sprite-player_shadow_m {
+    width: 64px;
+    height: 64px;
+    background-position: -783px -597px;
+}
+
+.sprite-player_shadow_r1 {
+    width: 64px;
+    height: 64px;
+    background-position: -783px -671px;
+}
+
+.sprite-player_shadow_r2 {
+    width: 64px;
+    height: 64px;
+    background-position: -5px -745px;
+}
+
+.sprite-proton_01 {
+    width: 13px;
+    height: 13px;
+    background-position: -843px -79px;
+}
+
+.sprite-proton_02 {
+    width: 9px;
+    height: 10px;
+    background-position: -843px -102px;
+}
+
+.sprite-proton_03 {
+    width: 5px;
+    height: 5px;
+    background-position: -843px -122px;
+}
+
+.sprite-vulcan_1 {
+    width: 6px;
+    height: 22px;
+    background-position: -843px -137px;
+}
+
+.sprite-vulcan_2 {
+    width: 9px;
+    height: 22px;
+    background-position: -843px -169px;
+}
+
+.sprite-vulcan_3 {
+    width: 4px;
+    height: 14px;
+    background-position: -695px -79px;
+}
