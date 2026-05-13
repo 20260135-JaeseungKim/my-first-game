@@ -1,9 +1,18 @@
 import pygame
 import random
-import sys
 import math
 import json
-import os
+import sys, os
+
+def resource_path(relative_path):
+    """개발 중과 빌드 후 모두 동작하는 경로 반환"""
+    if hasattr(sys, '_MEIPASS'):
+        base = sys._MEIPASS
+    else:
+        base = os.path.dirname(__file__)
+    return os.path.join(base, relative_path)
+print(resource_path("assets/player.png"))
+
 
 # 파이게임 초기화
 pygame.init()
@@ -37,7 +46,7 @@ stars = [[random.randint(0, WIDTH), random.randint(0, HEIGHT), random.randint(1,
 
 # ── 사운드/BGM 로드 ───────────────────────────────────────────────────
 SHOOT_SOUND = None
-_shoot_path = "./assets/sounds/ShootSound.wav"
+_shoot_path = resource_path("./assets/sounds/ShootSound.wav")
 if os.path.exists(_shoot_path):
     try:
         SHOOT_SOUND = pygame.mixer.Sound(_shoot_path)
@@ -48,8 +57,8 @@ if os.path.exists(_shoot_path):
 else:
     print(f"[경고] 파일 없음: {_shoot_path}")
 
-MAIN_BGM   = "./assets/sounds/MainGameBgm.wav"
-INGAME_BGM = "./assets/sounds/InGameBgm.wav"
+MAIN_BGM   = resource_path("./assets/sounds/MainGameBgm.wav")
+INGAME_BGM = resource_path("./assets/sounds/InGameBgm.wav")
 
 def play_bgm(path):
     if not os.path.exists(path):
@@ -78,7 +87,7 @@ def load_player_frames(size=(60, 60)):
     for i in range(1, 4):
         path = os.path.join(PLAYER_ANIM_PATH, f"Player{i}.png")
         try:
-            img = pygame.image.load(path).convert_alpha()
+            img = pygame.image.load(resource_path(path)).convert_alpha()
             img = pygame.transform.scale(img, size)
             frames.append(img)
         except Exception as e:
@@ -103,21 +112,21 @@ ENEMY_IMAGES = make_enemy_images()
 # ── 적 이미지 로드 ────────────────────────────────────────────────────
 METEO_IMG = None
 try:
-    _meteo_raw = pygame.image.load("./assets/images/Meteo.png").convert_alpha()
+    _meteo_raw = pygame.image.load(resource_path("./assets/images/Meteo.png")).convert_alpha()
     METEO_IMG = pygame.transform.scale(_meteo_raw, (44, 44))
 except Exception as e:
     print(f"[경고] Meteo 이미지 로드 실패: {e}")
 
 AIM_IMG = None
 try:
-    _aim_raw = pygame.image.load("./assets/images/AimMon.png").convert_alpha()
+    _aim_raw = pygame.image.load(resource_path("./assets/images/AimMon.png")).convert_alpha()
     AIM_IMG = pygame.transform.scale(_aim_raw, (60, 60))
 except Exception as e:
     print(f"[경고] AimMon 이미지 로드 실패: {e}")
 
 SHOOTER_IMG = None
 try:
-    _shooter_raw = pygame.image.load("./assets/images/ShooterMon.png").convert_alpha()
+    _shooter_raw = pygame.image.load(resource_path("./assets/images/ShooterMon.png")).convert_alpha()
     SHOOTER_IMG = pygame.transform.scale(_shooter_raw, (60, 60))
 except Exception as e:
     print(f"[경고] ShooterMon 이미지 로드 실패: {e}")
@@ -416,4 +425,3 @@ def main():
 
 if __name__ == "__main__":
     start_screen(); main()
-
